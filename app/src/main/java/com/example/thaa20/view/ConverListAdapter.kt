@@ -11,6 +11,12 @@ import kotlinx.android.synthetic.main.item_talkingt.view.*
 class ConverListAdapter(private val converList: ArrayList<Conversation>) :
     RecyclerView.Adapter<ConverListAdapter.ConverHolder>() {
 
+    fun updateConverList(newConverList: List<Conversation>) {
+        converList.clear()
+        converList.addAll(newConverList)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConverHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.item_talkingt, parent, false)
