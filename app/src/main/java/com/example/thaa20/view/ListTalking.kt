@@ -10,22 +10,19 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.thaa20.R
-import com.example.thaa20.model.Animal
-import com.example.thaa20.model.Conversation
+import com.example.thaa20.util.Conversation
 import com.example.thaa20.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.talking_list.*
-import java.util.*
 
 
 class ListTalking : Fragment() {
     lateinit var viewModel:ListViewModel
     private val listAdapter=ConverListAdapter(arrayListOf())
 
-    private val animalListDataObserver=Observer<List<Conversation>>{list->
+    private val animalListDataObserver=Observer<List<Conversation>>{ list->
         list?.let {
             conversList.visibility=View.VISIBLE
             listAdapter.updateConverList(it)
