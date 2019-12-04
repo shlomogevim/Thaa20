@@ -16,7 +16,9 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
     private fun getConvers() {
 
         val convesList=ArrayList<Conversation>()
-        for (index in 1..20){
+        val conv=Conversation(1,"על כן ולא","מה כבר ברור בחיים האלה")
+        convesList.add(conv)
+        for (index in 2..20){
             convesList.add(Conversation(index,"Conversation no $index","Some explanation about conversation number : $index"))
         }
         convers.value=convesList
