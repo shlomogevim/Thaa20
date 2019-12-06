@@ -11,6 +11,6 @@ class Const{
         const val CURRENT_VERSIA = "currentversia"
         const val PREFS_NAME = "myPrefs"
         const val CURRENT_SPEAKER = "stam_speaker"
-        var talkerList=ArrayList<Talker>()
+
     }
 }

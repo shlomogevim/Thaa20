@@ -16,10 +16,10 @@ class GetAndStoreData(val context: Context):  AppCompatActivity() {
 
 
      fun createTalkList(): ArrayList<Talker> {
-        var talkList: ArrayList<Talker>
+       var talkList: ArrayList<Talker>
         talkList = arrayListOf()
 
-        var jsonString = intent.getStringExtra(JSONSTRING)
+        val jsonString = intent.getStringExtra(JSONSTRING)
         if (jsonString == "none" || jsonString == "") {
             talkList = getTalkingListFromPref(0)
             saveTalkingListInPref(talkList)
