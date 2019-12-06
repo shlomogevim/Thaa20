@@ -6,17 +6,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ImageView.ScaleType.CENTER
 import android.widget.ImageView.ScaleType.CENTER_CROP
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thaa20.R
-import com.example.thaa20.model.Conversation
+import com.example.thaa20.util.Convers
 import kotlinx.android.synthetic.main.item_talking_new.view.*
 
-class ConverListAdapter(private val converList: ArrayList<Conversation>) :
+class ConverListAdapter(private val converList: ArrayList<Convers>) :
     RecyclerView.Adapter<ConverListAdapter.ConverHolder>() {
 
     val PREFIX="שיחה מספר:"
 
-    fun updateConverList(newConverList: List<Conversation>) {
+    fun updateConverList(newConverList: List<Convers>) {
         converList.clear()
         converList.addAll(newConverList)
         notifyDataSetChanged()
@@ -44,12 +45,24 @@ class ConverListAdapter(private val converList: ArrayList<Conversation>) :
         holder.view.tv_talkNum.text=PREFIX+converList[position].numC
         holder.view.tv_talkTitle.text=converList[position].title
         holder.view.tv_description.text=converList[position].explanation
+        holder.view.layout_itemList.setOnClickListener {
+            val action=ListTalkingDirections.actionToDetails(converList[position])
+            Navigation.findNavController(it).navigate(action)
+        }
 
     }
 
     class ConverHolder(val view: View) : RecyclerView.ViewHolder(view)
 
 }
+
+/*
+holder.view.animalLayout.setOnClickListener {
+    val action=ListFragmentDirections.
+        actionDetails(animalList[position])
+    Navigation.findNavController(holder.view).navigate(action)
+}*/
+
 
 /*
 class ConverListAdapter(private val converList: ArrayList<Conversation>) :

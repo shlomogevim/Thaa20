@@ -14,18 +14,16 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.thaa20.R
-import com.example.thaa20.model.Animal
-import com.example.thaa20.model.Conversation
+import com.example.thaa20.util.Convers
 import com.example.thaa20.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.talking_list.*
-import java.util.*
 
 
 class ListTalking : Fragment() {
     lateinit var viewModel:ListViewModel
     private val listAdapter=ConverListAdapter(arrayListOf())
 
-    private val animalListDataObserver=Observer<List<Conversation>>{list->
+    private val animalListDataObserver=Observer<List<Convers>>{list->
         list?.let {
             conversList.visibility=View.VISIBLE
             listAdapter.updateConverList(it)
@@ -56,6 +54,8 @@ class ListTalking : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.talking_list, container, false)
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,6 +76,11 @@ class ListTalking : Fragment() {
             viewModel.refresh()
             refreshLayout.isRefreshing=false
         }
+
+
+          val conv=Convers(1,"tada","rama")
+        val action=ListTalkingDirections.actionToDetails(conv)
+        Navigation.findNavController(view).navigate(action)
 
 
     }
