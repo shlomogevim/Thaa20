@@ -34,6 +34,8 @@ class DetailsTalking : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.talking_details, container, false)
     }
+    fun talkC()=talkList[getAndStoreData.getCurrentPage()]
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,6 +44,7 @@ class DetailsTalking : Fragment() {
             // tv.text=" Hi Man You SeleT Item num "+ conv!!.numC
         }
         setupParams(view)
+
         getTalkList()
 
         arrangeLayout = ArrangeLayout(view,talkList)
@@ -49,10 +52,12 @@ class DetailsTalking : Fragment() {
 
         arrangeLayout.drawListView()
 
-        val talker=talkList[getAndStoreData.getCurrentTalker()]
 
+        arrangeLayout.operateListView()
 
-        animationInAction.excuteTalker(talker)
+        animationInAction.excuteTalker(talkC())
+       // arrangeLayout.updateTitleTalkerSituation(talker)
+
 
         arrangeLayout.setPosition(1)
 
@@ -95,10 +100,15 @@ class DetailsTalking : Fragment() {
         return talkList1
     }
 
+
+
+
+
+
     private fun setupParams(view: View) {
         val cont=view.context
         getStoreData = GetAndStoreData(cont)
-        counterStep = getStoreData.getPage()
+        counterStep = getStoreData.getCurrentPage()
         animationInAction = AnimationInAction(view)
         getAndStoreData = GetAndStoreData(cont)
 
