@@ -12,7 +12,9 @@ import kotlinx.android.synthetic.main.god_layout.view.*
 import kotlinx.android.synthetic.main.man_layout.view.*
 import java.util.*
 
-class AnimationInAction(val context: Context, val view: View) {
+class AnimationInAction(val view: View) {
+    val contex = view.context
+
 
         fun excuteTalker(talker: Talker) {
 
@@ -91,7 +93,7 @@ class AnimationInAction(val context: Context, val view: View) {
                         0, talker, listOfTextview, listOfTextviewM,  listOfTextviewM2)
                 } else {
                     Utile.move_swing(0, talker, listOfTextview)
-                    Toast.makeText(context, "Sorry It just for God", Toast.LENGTH_LONG).show()
+                    Toast.makeText(contex, "Sorry It just for God", Toast.LENGTH_LONG).show()
                 }
                 61 -> if (talker.whoSpeake == "god") {
                     Utile.godAppearFromTwoPlaces(1, talker, listOfTextview, listOfTextviewM, listOfTextviewM2)
@@ -233,7 +235,7 @@ class AnimationInAction(val context: Context, val view: View) {
 //-------------------------------------------------------------------
 
 
-        val helper = Helper(context)
+        val helper = Helper(contex)
         var tv0: TextView? = null
         var tv0A: TextView? = null
         var tv2A: TextView? = null

@@ -26,14 +26,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun stam(){
+   /* fun stam(){
 
          val st="courses"
          val st1="11"
          val st2="name"
-       /* val st="talker1"
+       *//* val st="talker1"
         val st1="3"
-        val st2="main"*/
+        val st2="main"*//*
         var db=FirebaseFirestore.getInstance()
         var doc=db.collection(st).document(st1).get().addOnCompleteListener { task ->
             if (task.result!!.exists()){
@@ -63,13 +63,7 @@ class MainActivity : AppCompatActivity() {
         }
         Log.d("clima", "jsonS->$jsonS")
         return jsonS
-    }
-
-
-
-
-
-
+    }*/
 
 
    /* private fun retriveDataFromFirebase() {
@@ -91,17 +85,10 @@ class MainActivity : AppCompatActivity() {
         }
     }*/
 
-    private fun getData(db: FirebaseFirestore):String {
+  /*  private fun getData(db: FirebaseFirestore):String {
         var jsonS = ""
 
-
-
-
-
-
-
-
-        /* db.collection("talker1").document("3").get().addOnCompleteListener { task ->
+         db.collection("talker1").document("3").get().addOnCompleteListener { task ->
              Log.d("clima","one")
              if (task.result?.exists()!!) {
                  Log.d("clima","two")
@@ -119,11 +106,9 @@ class MainActivity : AppCompatActivity() {
                      Toast.LENGTH_LONG
                  ).show()
              }
-         }*/
+         }
         return jsonS
-
-
-    }
+    }*/
 
 
 

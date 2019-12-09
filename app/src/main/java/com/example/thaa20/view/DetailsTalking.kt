@@ -23,6 +23,7 @@ class DetailsTalking : Fragment() {
     var conv: Convers? = null
     lateinit var getStoreData: GetAndStoreData
     lateinit var animationInAction: AnimationInAction
+    lateinit var getAndStoreData:GetAndStoreData
     lateinit var arrangeLayout: ArrangeLayout
     lateinit var talkList: ArrayList<Talker>
     var counterStep = 1
@@ -40,136 +41,112 @@ class DetailsTalking : Fragment() {
             conv = DetailsTalkingArgs.fromBundle(it).currentConvers
             // tv.text=" Hi Man You SeleT Item num "+ conv!!.numC
         }
-
-
         setupParams(view)
+        getTalkList()
+
+        arrangeLayout = ArrangeLayout(view,talkList)
+
+
         arrangeLayout.drawListView()
 
-
-       // stam()
-        val jso=stam1()
-        Log.d("clima","out out side $jso")
+        val talker=talkList[getAndStoreData.getCurrentTalker()]
 
 
-
-        //  val jsonS = retriveDataFromFirebase()
-
-
-      //  talkList=getTalkList1()
-
-
-       // arrangeLayout.prepareAllTheListViewParam()
-
-
+        animationInAction.excuteTalker(talker)
 
         arrangeLayout.setPosition(1)
+
     }
 
-    fun stam1():String{
-
-        var jso=""
-
-        val st="courses"
-        val st1="11"
-        val st2="name"
-         /*val st="talker1"
-         val st1="3"
-         val st2="main"*/
-        var db=FirebaseFirestore.getInstance()
-        var doc=db.collection(st).document(st1).get().addOnCompleteListener { task ->
-            if (task.result!!.exists()){
-                Log.d("clima","name->${task.result?.getString(st2)}")
-                jso=task.result?.getString(st2)!!
-                Log.d("clima","inside $jso")
-            }else{
-
-            }
+    private fun getTalkList() {
+        talkList=getStoreData.createTalkListFromPref()
+        if (talkList.size==0){
+            createTalkingListFromFirestore()  //open tool->firebase->firestore see if all depen. ok
+                                              //rebuilt project
+                                              // run and wait for result
         }
-        Log.d("clima","out side $jso")
-        return jso
-    }
-    fun stam(){
+        if (talkList.size==0){
+            // !! must be in remarked becaseus it inteferring to the firebase
+            //  talkList=getStoreData.createTalkListFromTheStart()
 
-        /* val st="courses"
-         val st1="11"
-         val st2="name"*/
-        val st="talker1"
-        val st1="3"
-        val st2="main"
-        var db=FirebaseFirestore.getInstance()
-        var doc=db.collection(st).document(st1).get().addOnCompleteListener { task ->
-            if (task.result!!.exists()){
-                Log.d("clima","name->${task.result?.getString(st2)}")
-            }else{
-
-            }
         }
     }
-    fun retriveDataFromFirebase():String{
-        val st="courses"
-        val st1="12"
-        val st2="name"
 
-        /*val st="talker1"
-        val st1="3"
-        val st2="main"*/
-
-        var jsonS:String?=null
-        var db=FirebaseFirestore.getInstance()
-        var doc=db.collection(st).document(st1).get().addOnCompleteListener { task ->
-            if (task.result!!.exists()){
-                jsonS=task.result?.getString(st2)
-                Log.d("clima","name->${task.result?.getString(st2)}")
-            }else{
-                jsonS="no data"
-                Log.d("clima","name-> no name")
-
-            }
-        }
-        return jsonS!!
-    }
-
-    fun getTalkList1(): ArrayList<Talker> {
-        var jsonS:String?
+    fun createTalkingListFromFirestore():ArrayList<Talker>{
         var talkList1 = ArrayList<Talker>()
-
-        jsonS = getStoreData.getGsonString()
-
-        if (jsonS == null) {
-            jsonS = retriveDataFromFirebase()
+        var jsonS=""
+        /*val st="courses"
+        val st1="11"
+        val st2="name"*/
+         val st="talker1"
+         val st1="3"
+         val st2="main"
+        var db=FirebaseFirestore.getInstance()
+        var doc=db.collection(st).document(st1).get().addOnCompleteListener { task ->
+            if (task.result!!.exists()){
+                jsonS=task.result?.getString(st2)!!
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<Talker>>() {}.type
+                talkList1 = gson.fromJson(jsonS, type)
+                getStoreData.saveTalkingListInPref(talkList1)
+                Log.d("clima"," $jsonS")
+            }
         }
-        if (jsonS == null) {
-            talkList1 = getStoreData.createTalkListFromTheStart()
-        } else {
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<Talker>>() {}.type
-            talkList1 = gson.fromJson(jsonS, type)
-        }
-        getStoreData.saveTalkingListInPref(talkList1)
-
-      /*        Handler().postDelayed(
-                  {
-                      saveJsonString(jsonS)
-                  }, 5000
-              )
-          }*/
-
         return talkList1
     }
 
-
-
-
-
-
     private fun setupParams(view: View) {
-        getStoreData = GetAndStoreData(context!!)
+        val cont=view.context
+        getStoreData = GetAndStoreData(cont)
         counterStep = getStoreData.getPage()
-        animationInAction = AnimationInAction(context!!, mainDetailLayout)
-        arrangeLayout = ArrangeLayout(view)
+        animationInAction = AnimationInAction(view)
+        getAndStoreData = GetAndStoreData(cont)
 
     }
 }
+
+
+/*fun stam(){
+    *//* val st="courses"
+     val st1="11"
+     val st2="name"*//*
+    val st="talker1"
+    val st1="3"
+    val st2="main"
+    var db=FirebaseFirestore.getInstance()
+    var doc=db.collection(st).document(st1).get().addOnCompleteListener { task ->
+        if (task.result!!.exists()){
+            Log.d("clima","name->${task.result?.getString(st2)}")
+        }else{
+
+        }
+    }
+}*/
+
+/*fun retriveDataFromFirebase():String{
+    val st="courses"
+    val st1="12"
+    val st2="name"
+
+    *//*val st="talker1"
+    val st1="3"
+    val st2="main"*//*
+
+    var jsonS:String?=null
+    var db=FirebaseFirestore.getInstance()
+    var doc=db.collection(st).document(st1).get().addOnCompleteListener { task ->
+        if (task.result!!.exists()){
+            jsonS=task.result?.getString(st2)
+            Log.d("clima","name->${task.result?.getString(st2)}")
+        }else{
+            jsonS="no data"
+            Log.d("clima","name-> no name")
+
+        }
+    }
+    return jsonS!!
+}*/
+
 
 /*
 var jsonS = shar.getGsonString()

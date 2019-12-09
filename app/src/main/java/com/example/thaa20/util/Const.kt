@@ -11,6 +11,8 @@ class Const{
         const val CURRENT_VERSIA = "currentversia"
         const val PREFS_NAME = "myPrefs"
         const val CURRENT_SPEAKER = "stam_speaker"
+        const val CURRENT_TALKER = "current_talker"
+        const val LAST_TALKER = "last_talker"
 
     }
 }

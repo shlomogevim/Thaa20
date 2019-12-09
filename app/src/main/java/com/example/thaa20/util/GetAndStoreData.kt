@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.thaa20.util.Const.Companion.ASSEETS_FILE
 import com.example.thaa20.util.Const.Companion.CURRENT_SPEAKER
+import com.example.thaa20.util.Const.Companion.CURRENT_TALKER
+import com.example.thaa20.util.Const.Companion.LAST_TALKER
 import com.example.thaa20.util.Const.Companion.PREFS_NAME
 import com.example.thaa20.util.Const.Companion.TALKLIST
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,152 +19,48 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     var myPref = context.getSharedPreferences(PREFS_NAME, 0)
 
-    fun getTalkList(): ArrayList<Talker> {
+    fun createTalkListFromPref(): ArrayList<Talker> {
         var talkList1 = ArrayList<Talker>()
 
         var jsonS = getGsonString()
-
-        if (jsonS == null) {
-            jsonS = retriveDataFromFirebase()
-        }
-        if (jsonS == null) {
-            talkList1 = createTalkListFromTheStart()
-        } else {
+        if (jsonS != null) {
             val gson = Gson()
             val type = object : TypeToken<ArrayList<Talker>>() {}.type
             talkList1 = gson.fromJson(jsonS, type)
+            saveTalkingListInPref(talkList1)
         }
-        saveTalkingListInPref(talkList1)
-
-        /*      Handler().postDelayed(
-                  {
-                      saveJsonString(jsonS)
-                  }, 5000
-              )
-          }*/
-
-
         return talkList1
     }
 
-    fun stam(){
-
-        /* val st="courses"
-         val st1="11"
-         val st2="name"*/
-        val st="talker1"
-        val st1="3"
-        val st2="main"
-        var db=FirebaseFirestore.getInstance()
-        var doc=db.collection(st).document(st1).get().addOnCompleteListener { task ->
-            if (task.result!!.exists()){
-                Log.d("clima","name->${task.result?.getString(st2)}")
-            }else{
-                Log.d("clima","name-> no name")
-
-            }
+    fun getJsonArryFromPref( ): ArrayList<Talker> {
+        var list= ArrayList<Talker>()
+        var jsonS:String?=null
+        jsonS = myPref.getString(TALKLIST, null)
+        if (!jsonS.isNullOrEmpty()){
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Talker>>() {}.type
+            list = gson.fromJson(jsonS, type)
         }
-
+        return list
     }
 
 
-     fun retriveDataFromFirebase(): String {
-        var jsonS = ""
-        Log.d("clima", "befor collection")
-        var db = FirebaseFirestore.getInstance()
 
-        db.collection("talker1").document("3").get().addOnCompleteListener { task ->
-            if (task.result!!.exists()) {
-                jsonS = task.result!!.getString("main")!!
-            } else {
-                Toast.makeText(this, "Its nottt ok", Toast.LENGTH_LONG).show()
-                jsonS = "no data"
-            }
-        }
-        Log.d("clima", "jsonS->$jsonS")
-        return jsonS
-    }
-
-
-    private fun getData(db: FirebaseFirestore): String {
-        var jsonS = ""
-
-        var doc = db.collection("talker1").document("3").get().addOnCompleteListener { task ->
-            if (task.result!!.exists()) {
-                jsonS = task.result!!.getString("main")!!
-                Log.d("clima", "jsonS->${task.result?.getString("main")}")
-
-            } else {
-                Toast.makeText(this, "Its nottt ok", Toast.LENGTH_LONG).show()
-
-            }
-        }
-
-
-        return jsonS
-
-
-    }
-
-
-    /*
-    *   var jsonS = shar.getGsonString()
-
-        // jsonString=null
-
-
-         if (jsonS != null) {
-             createJustFirstTalk(jsonS)
-         } else {
-             jsonS=retriveDataFromFirebase()
-
-             Handler().postDelayed(
-                 {
-                     shar.saveJsonString(jsonS)
-                     createJustFirstTalk(jsonS)
-                 }, 5000
-             )
-         }
-
-        // initPara()
-     }
-
-     private fun createJustFirstTalk(jsonS: String?) {
-         val intent = Intent(this, AnimationScreen::class.java)
-         intent.putExtra(JSONSTRING, jsonS)
-         startActivityForResult(intent, REQEST_CODE)
-     }
-
-     private fun retriveDataFromFirebase():String {
-         var jsonS=""
-
-         var db = FirebaseFirestore.getInstance()
-         db.collection("talker1").document("3").get().addOnCompleteListener { task ->
-
-             if (task.result?.exists()!!) {
-                 jsonS = task.result!!.getString("main")!!
-
-             } else {
-                 jsonS = "none"
-                 Toast.makeText(
-                     this,
-                     "Not Find because ${task.exception?.message} ",
-                     Toast.LENGTH_LONG
-                 ).show()
-             }
-         }
-         return jsonS
-     }
-
-
- */
 
 
     fun savePage(page: Int) {
         myPref.edit().putInt(CURRENT_SPEAKER, page).apply()
     }
+    fun saveCurrentTalker(index: Int) {
+        myPref.edit().putInt(CURRENT_TALKER, index).apply()
+    }
+    fun saveLastTalker(index: Int) {
+        myPref.edit().putInt(LAST_TALKER, index).apply()
+    }
 
     fun getPage(): Int = myPref.getInt(CURRENT_SPEAKER, 1)
+    fun getCurrentTalker(): Int = myPref.getInt(CURRENT_TALKER, 1)
+    fun getLastTalker(): Int = myPref.getInt(LAST_TALKER, 1)
 
 
     fun getGsonString() = myPref.getString(TALKLIST, null)
