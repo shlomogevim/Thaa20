@@ -43,9 +43,12 @@ class DetailsTalking : Fragment() {
             conv = DetailsTalkingArgs.fromBundle(it).currentConvers
             // tv.text=" Hi Man You SeleT Item num "+ conv!!.numC
         }
+
         setupParams(view)
 
         getTalkList()
+
+      //  storeTalkingListFromFirestore(talkList,6)
 
         arrangeLayout = ArrangeLayout(view,talkList)
 
@@ -56,6 +59,7 @@ class DetailsTalking : Fragment() {
         arrangeLayout.operateListView()
 
         animationInAction.excuteTalker(talkC())
+
        // arrangeLayout.updateTitleTalkerSituation(talker)
 
 
@@ -65,6 +69,7 @@ class DetailsTalking : Fragment() {
 
     private fun getTalkList() {
         talkList=getStoreData.createTalkListFromPref()
+
         if (talkList.size==0){
             createTalkingListFromFirestore()  //open tool->firebase->firestore see if all depen. ok
                                               //rebuilt project
@@ -101,6 +106,94 @@ class DetailsTalking : Fragment() {
     }
 
 
+    fun storeTalkingListFromFirestore(talkList:ArrayList<Talker>,index:Int){
+            val st = "talker1"
+            val st1 = index.toString()
+            val gson = Gson()
+            val jsonS = gson.toJson(talkList)
+            var db = FirebaseFirestore.getInstance()
+            var talker = HashMap<String, Any>()
+            talker.put("index", st1)
+            jsonS?.let { talker.put("main", it) }
+            db.collection(st).document(st1).set(talker)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(context, "Saving is succsses", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Not Save because \${task.exception?.message",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+ /*   db.collection("talker1").document(versia.toString()).set(talker)
+    .addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            Toast.makeText(this, "Saving is succsses", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(
+                this,
+                "Not Save because \${task.exception?.message",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+
+} */
+
+
+
+
+
+
+    /* db.collection("courses").document("11").set(course).addOnCompleteListener { task ->
+           if (task.isSuccessful){
+               Toast.makeText(this,"Its ok",Toast.LENGTH_LONG).show()
+           }else{
+               Toast.makeText(this,"Its nottt ok",Toast.LENGTH_LONG).show()
+
+           }
+        }*/
 
 
 

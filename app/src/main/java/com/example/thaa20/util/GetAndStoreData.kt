@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.thaa20.util.Const.Companion.ASSEETS_FILE
 import com.example.thaa20.util.Const.Companion.CURRENT_PAGE
+import com.example.thaa20.util.Const.Companion.FILE_NUM
 import com.example.thaa20.util.Const.Companion.LAST_PAGE
 import com.example.thaa20.util.Const.Companion.PREFS_NAME
 import com.example.thaa20.util.Const.Companion.TALKLIST
@@ -18,15 +19,37 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     var myPref = context.getSharedPreferences(PREFS_NAME, 0)
 
+
+    fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
+    fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
+    fun saveCurrentFile(index: Int) {myPref.edit().putInt(FILE_NUM, index).apply()}
+
+    fun getCurrentPage(): Int = myPref.getInt(CURRENT_PAGE, 1)
+    fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
+    fun getCurrentFile(): Int = myPref.getInt(FILE_NUM, 1)
+
+
+    fun saveTalkingListInPref(talkingList: ArrayList<Talker>) {
+        val gson = Gson()
+        val tagNum=getCurrentFile()
+        val jsonString = gson.toJson(talkingList)
+        myPref.edit().putString(TALKLIST+tagNum.toString(), jsonString).apply()
+    }
+
+
+
+
+
     fun createTalkListFromPref(): ArrayList<Talker> {
         var talkList1 = ArrayList<Talker>()
+        val tagNum=getCurrentFile()
 
-        var jsonS = getGsonString()
+        var jsonS =  myPref.getString(TALKLIST+tagNum.toString(), null)
         if (jsonS != null) {
             val gson = Gson()
             val type = object : TypeToken<ArrayList<Talker>>() {}.type
             talkList1 = gson.fromJson(jsonS, type)
-            saveTalkingListInPref(talkList1)
+            //saveTalkingListInPref(talkList1)
         }
         return talkList1
     }
@@ -34,33 +57,12 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
 
 
-    fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
-    fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
-
-    fun getCurrentPage(): Int = myPref.getInt(CURRENT_PAGE, 1)
-    fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
 
 
-    fun getGsonString() = myPref.getString(TALKLIST, null)
-
-
-
-
-    fun saveTalkingListInPref(talkingList: ArrayList<Talker>) {
-        val gson = Gson()
-        val jsonString = gson.toJson(talkingList)
-        myPref.edit().putString(TALKLIST, jsonString).apply()
-    }
 
     fun saveJsonString(jsonS: String?) {
         myPref.edit().putString(TALKLIST, jsonS).apply()
     }
-
-
-
-
-
-
 
     fun getJsonArryFromPref( ): ArrayList<Talker> {
         var list= ArrayList<Talker>()

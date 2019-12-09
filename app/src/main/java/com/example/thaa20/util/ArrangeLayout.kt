@@ -36,13 +36,13 @@ class ArrangeLayout(val view: View, val talkList: ArrayList<Talker>) {
     val helper = Helper(contex)
     val animationInAction = AnimationInAction(view)
 
-    var interval = 0
-    var currentColor = "#stam"
+    private var interval = 0
+    private var currentColor = "#stam"
     private var plusMode = true
-    var current_styleNum = 10
+   /* var current_styleNum = 10
     var current_animNum = 10
     var current_dur = 1L
-    var current_textSize = 1f
+    var current_textSize = 1f*/
 
     fun talkC()=talkList[getAndStoreData.getCurrentPage()]
     fun talkL()=talkList[getAndStoreData.getLastPage()]
