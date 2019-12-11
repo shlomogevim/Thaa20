@@ -66,7 +66,7 @@ class DetailsTalking : Fragment() {
 
         buttonSpace.initButton()
 
-        showPosition=1
+        showPosition=3
 
         getAndStoreData.saveShowPosition(showPosition)
 

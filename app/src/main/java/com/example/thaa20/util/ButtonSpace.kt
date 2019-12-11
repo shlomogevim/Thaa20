@@ -81,8 +81,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
     @SuppressLint("RestrictedApi")
     private fun setShowPositionMode() {
 
-        showPosition = 3
-        getAndStoreData.saveShowPosition(showPosition)
+        showPosition = getAndStoreData.getShowPosition()
 
         with(view) {
             if (showPosition == 1) {
@@ -326,6 +325,8 @@ class ButtonSpace(val view: View) : View.OnClickListener {
         with(view) {
             if (ind == 0) {
                 if (showPosition == 3) {
+                    fab.isClickable=false
+                    fab1.isClickable=false
                     fabAnimation(0)
                 } else {
                     textRevBtn.visibility = INVISIBLE
@@ -342,8 +343,8 @@ class ButtonSpace(val view: View) : View.OnClickListener {
             }
             if (ind == 1) {
                 if (showPosition == 3) {
-                    /*fab.visibility = VISIBLE
-                    fab1.visibility = VISIBLE*/
+                    fab.isClickable=true
+                    fab1.isClickable=true
                     fabAnimation(1)
                 } else {
                     textRevBtn.visibility = VISIBLE
