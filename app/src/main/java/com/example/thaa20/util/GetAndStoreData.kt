@@ -1,33 +1,66 @@
 package com.example.thaa20.util
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.drawToBitmap
 import com.example.thaa20.util.Const.Companion.ASSEETS_FILE
 import com.example.thaa20.util.Const.Companion.CURRENT_PAGE
 import com.example.thaa20.util.Const.Companion.FILE_NUM
+import com.example.thaa20.util.Const.Companion.LASTTALKER
 import com.example.thaa20.util.Const.Companion.LAST_PAGE
 import com.example.thaa20.util.Const.Companion.PREFS_NAME
+import com.example.thaa20.util.Const.Companion.SHOWPOSITION
 import com.example.thaa20.util.Const.Companion.TALKLIST
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.ByteArrayOutputStream
 
-class GetAndStoreData(val context: Context) : AppCompatActivity() {
+class GetAndStoreData(view:View) : AppCompatActivity() {
 
+    val contex=view.context
 
-    var myPref = context.getSharedPreferences(PREFS_NAME, 0)
+    var myPref = contex.getSharedPreferences(PREFS_NAME, 0)
 
 
     fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
     fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
     fun saveCurrentFile(index: Int) {myPref.edit().putInt(FILE_NUM, index).apply()}
+   fun saveShowPosition(index: Int) {myPref.edit().putInt(SHOWPOSITION, index).apply()}
+
+
+
 
     fun getCurrentPage(): Int = myPref.getInt(CURRENT_PAGE, 1)
     fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
     fun getCurrentFile(): Int = myPref.getInt(FILE_NUM, 1)
+    fun getShowPosition(): Int = myPref.getInt(SHOWPOSITION, 1)
 
+
+    private fun decodebase64(input:String):Bitmap{
+        val decodeByte=Base64.decode(input,0)
+        val bit=BitmapFactory.decodeByteArray(decodeByte,0,decodeByte.size)
+        return bit
+    }
+
+
+
+    private fun encodeToBase64(image:Bitmap):String{
+        val immage=image
+        val baos=ByteArrayOutputStream()
+        immage.compress(Bitmap.CompressFormat.PNG,100,baos)
+        val b=baos.toByteArray()
+        val imageEncoded=Base64.encodeToString(b,Base64.DEFAULT)
+        Log.d("clima","imageEncode->$imageEncoded")
+        return imageEncoded
+    }
 
     fun saveTalkingListInPref(talkingList: ArrayList<Talker>) {
         val gson = Gson()
@@ -35,9 +68,22 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         val jsonString = gson.toJson(talkingList)
         myPref.edit().putString(TALKLIST+tagNum.toString(), jsonString).apply()
     }
+    fun saveLastTalker(lastTalker: Talker) {
+        val gson = Gson()
+        val jsonString = gson.toJson(lastTalker)
+        myPref.edit().putString(LASTTALKER, jsonString).apply()
+    }
 
-
-
+    fun getLastTalker():Talker{
+        var talker=Talker()
+        var jsonS=myPref.getString(LASTTALKER,null)
+        if (jsonS!=null){
+            val gson=Gson()
+            val type = object : TypeToken<Talker>() {}.type
+            talker = gson.fromJson(jsonS, type)
+        }
+        return talker
+    }
 
 
     fun createTalkListFromPref(): ArrayList<Talker> {
@@ -123,7 +169,7 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         val currenteFile = "text/text" + ASSEETS_FILE.toString() + ".txt"
 
         var countItem = 0
-        var text = context.assets.open(currenteFile).bufferedReader().use {
+        var text = contex.assets.open(currenteFile).bufferedReader().use {
             it.readText()
         }
         text = text.replace("\r", "")

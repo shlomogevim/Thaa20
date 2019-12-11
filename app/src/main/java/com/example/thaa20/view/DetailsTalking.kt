@@ -1,14 +1,14 @@
 package com.example.thaa20.view
 
 
-import android.content.Intent
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import com.example.thaa20.R
 import com.example.thaa20.util.*
@@ -25,8 +25,9 @@ class DetailsTalking : Fragment() {
     lateinit var animationInAction: AnimationInAction
     lateinit var getAndStoreData:GetAndStoreData
     lateinit var arrangeLayout: ArrangeLayout
+    lateinit var buttonSpace:ButtonSpace
     lateinit var talkList: ArrayList<Talker>
-    var counterStep = 1
+    var showPosition=1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,27 +45,44 @@ class DetailsTalking : Fragment() {
             // tv.text=" Hi Man You SeleT Item num "+ conv!!.numC
         }
 
-        setupParams(view)
+
+
+        getStoreData = GetAndStoreData(view)
+        animationInAction = AnimationInAction(view)
+        getAndStoreData = GetAndStoreData(view)
+
+        getAndStoreData.saveCurrentFile(20)
 
         getTalkList()
 
-      //  storeTalkingListFromFirestore(talkList,6)
+        arrangeLayout = ArrangeLayout(view)
+        buttonSpace=ButtonSpace(view)
 
-        arrangeLayout = ArrangeLayout(view,talkList)
-
+        backGroundConfigration()
 
         arrangeLayout.drawListView()
 
-
         arrangeLayout.operateListView()
+
+        buttonSpace.initButton()
+
+        showPosition=1
+
+        getAndStoreData.saveShowPosition(showPosition)
+
+     //   getAndStoreData.saveCurrentPage(1)
+
+        arrangeLayout.setPosition()
 
         animationInAction.excuteTalker(talkC())
 
-       // arrangeLayout.updateTitleTalkerSituation(talker)
+    }
 
-
-        arrangeLayout.setPosition(1)
-
+    fun backGroundConfigration() {
+        val animationDrawable = imageView.background as? AnimationDrawable
+        animationDrawable?.setEnterFadeDuration(2000)
+        animationDrawable?.setExitFadeDuration(4000)
+        animationDrawable?.start()
     }
 
     private fun getTalkList() {
@@ -80,11 +98,12 @@ class DetailsTalking : Fragment() {
             //  talkList=getStoreData.createTalkListFromTheStart()
 
         }
+        getAndStoreData.saveTalkingListInPref(talkList)
     }
 
     fun createTalkingListFromFirestore():ArrayList<Talker>{
         var talkList1 = ArrayList<Talker>()
-        var jsonS=""
+        var jsonS: String
         /*val st="courses"
         val st1="11"
         val st2="name"*/
@@ -92,7 +111,7 @@ class DetailsTalking : Fragment() {
          val st1="3"
          val st2="main"
         var db=FirebaseFirestore.getInstance()
-        var doc=db.collection(st).document(st1).get().addOnCompleteListener { task ->
+        db.collection(st).document(st1).get().addOnCompleteListener { task ->
             if (task.result!!.exists()){
                 jsonS=task.result?.getString(st2)!!
                 val gson = Gson()
@@ -107,6 +126,8 @@ class DetailsTalking : Fragment() {
 
 
     fun storeTalkingListFromFirestore(talkList:ArrayList<Talker>,index:Int){
+
+        // must transfer value with  key-value format
             val st = "talker1"
             val st1 = index.toString()
             val gson = Gson()
@@ -198,14 +219,7 @@ class DetailsTalking : Fragment() {
 
 
 
-    private fun setupParams(view: View) {
-        val cont=view.context
-        getStoreData = GetAndStoreData(cont)
-        counterStep = getStoreData.getCurrentPage()
-        animationInAction = AnimationInAction(view)
-        getAndStoreData = GetAndStoreData(cont)
 
-    }
 }
 
 

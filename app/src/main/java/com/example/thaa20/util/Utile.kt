@@ -11,7 +11,8 @@ object Utile {
         var start = 0L
         var end = 0L
 
-        var listener: ((item: Int, myTime: Long) -> Unit)? = null
+
+        var listener1: ((item: Int, myTime: Long) -> Unit)? = null
 
 
         fun chageBackgroundColor(ind: Int, textView: TextView, dur: Long) {
@@ -42,7 +43,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(ind, end)
+                        listener1?.invoke(ind, end)
                     }
             }
         }
@@ -57,7 +58,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(ind, end)
+                        listener1?.invoke(ind, end)
                     }
             } else {
                 ViewAnimator
@@ -70,7 +71,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(ind, end)
+                        listener1?.invoke(ind, end)
                     }
 
             }
@@ -91,7 +92,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(ind, end)
+                        listener1?.invoke(ind, end)
                     }
 
             } else {
@@ -110,7 +111,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(ind, end)
+                        listener1?.invoke(ind, end)
                     }
 
             }
@@ -128,7 +129,7 @@ object Utile {
                 .start()
                 .onStop {
                     end = System.currentTimeMillis() - start
-                    listener?.invoke(ind, end)
+                    listener1?.invoke(ind, end)
                 }
 
         }
@@ -149,7 +150,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(ind, end)
+                        listener1?.invoke(ind, end)
                     }
             } else {
                 ViewAnimator
@@ -498,7 +499,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(1, end)
+                        listener1?.invoke(1, end)
                     }
             }
 
@@ -513,7 +514,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(2, end)
+                        listener1?.invoke(2, end)
                     }
             }
             if (arr.size == 3) {
@@ -530,7 +531,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(3, end)
+                        listener1?.invoke(3, end)
                     }
             }
             if (arr.size == 4) {
@@ -550,7 +551,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(4, end)
+                        listener1?.invoke(4, end)
                     }
             }
             if (arr.size == 5) {
@@ -573,7 +574,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(5, end)
+                        listener1?.invoke(5, end)
                     }
             }
             if (arr.size == 6) {
@@ -599,7 +600,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(6, end)
+                        listener1?.invoke(6, end)
                     }
             }
 
@@ -620,7 +621,7 @@ object Utile {
                         .start()
                         .onStop {
                             end = System.currentTimeMillis() - start
-                            listener?.invoke(1, end)
+                            listener1?.invoke(1, end)
                         }
                 }
 
@@ -638,7 +639,7 @@ object Utile {
                         .start()
                         .onStop {
                             end = System.currentTimeMillis() - start
-                            listener?.invoke(2, end)
+                            listener1?.invoke(2, end)
                         }
                 }
                 if (arr.size == 3) {
@@ -658,7 +659,7 @@ object Utile {
                         .start()
                         .onStop {
                             end = System.currentTimeMillis() - start
-                            listener?.invoke(3, end)
+                            listener1?.invoke(3, end)
                         }
                 }
                 if (arr.size == 4) {
@@ -681,7 +682,7 @@ object Utile {
                         .start()
                         .onStop {
                             end = System.currentTimeMillis() - start
-                            listener?.invoke(4, end)
+                            listener1?.invoke(4, end)
                         }
                 }
                 if (arr.size == 5) {
@@ -707,7 +708,7 @@ object Utile {
                         .start()
                         .onStop {
                             end = System.currentTimeMillis() - start
-                            listener?.invoke(5, end)
+                            listener1?.invoke(5, end)
                         }
                 }
                 if (arr.size == 6) {
@@ -736,7 +737,7 @@ object Utile {
                         .start()
                         .onStop {
                             end = System.currentTimeMillis() - start
-                            listener?.invoke(6, end)
+                            listener1?.invoke(6, end)
                         }
                 }
             }
@@ -764,7 +765,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(1, end)
+                        listener1?.invoke(1, end)
                     }
             }
             if (ind == 1) {
@@ -789,7 +790,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(2, end)
+                        listener1?.invoke(2, end)
                     }
 
             }
@@ -812,7 +813,7 @@ object Utile {
                     .start()
                     .onStop {
                         end = System.currentTimeMillis() - start
-                        listener?.invoke(3, end)
+                        listener1?.invoke(3, end)
                     }
             }
 

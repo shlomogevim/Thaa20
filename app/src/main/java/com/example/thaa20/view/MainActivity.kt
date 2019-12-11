@@ -1,27 +1,26 @@
 package com.example.thaa20.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.thaa20.R
+import com.example.thaa20.util.Const.Companion.REQEST_CODE
 import com.example.thaa20.util.GetAndStoreData
 import com.example.thaa20.util.Talker
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.talking_details.*
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var getAndStore: GetAndStoreData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getAndStore = GetAndStoreData(this)
-        getAndStore.saveCurrentFile(20)          // its the current text file that we working on
 
-       // storeTalkingListInFirestore()
 
-         setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)
     }
 
 
@@ -35,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun storeTalkingListInFirestore() {
-        val getAndStoreData = GetAndStoreData(this)
+        val getAndStoreData = GetAndStoreData(mainDetailLayout)
         var talkList = ArrayList<Talker>()
 
         talkList = getAndStoreData.createTalkListFromPref()

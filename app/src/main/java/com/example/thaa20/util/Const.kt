@@ -1,6 +1,6 @@
 package com.example.thaa20.util
 
-class Const{
+class Const {
     companion object {
         const val TALKLIST = "talklist20"
         const val ASSEETS_FILE = 20
@@ -12,6 +12,7 @@ class Const{
         const val PREFS_NAME = "myPrefs"
         const val CURRENT_PAGE = "current_page"
         const val LAST_PAGE = "last_talker"
-
+        const val LASTTALKER = "lasttalker"
+        const val SHOWPOSITION="show_position"
     }
 }
