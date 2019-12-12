@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Color
+import android.util.Log
+import android.util.TimeUtils
+import android.util.TimingLogger
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -13,12 +16,18 @@ import com.example.thaa20.R
 import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.helper_view_layout.view.*
 import kotlinx.android.synthetic.main.talking_details.view.*
+import java.util.concurrent.TimeUnit
 
 class ButtonSpace(val view: View) : View.OnClickListener {
     val contex = view.context
     val getAndStoreData = GetAndStoreData(view)
     var talkList = getAndStoreData.getTalkingListFromPref(1)
     val animationInAction = AnimationInAction(view)
+
+    var statrTime=System.nanoTime()
+    var endTime=System.nanoTime()
+
+
 
     var showPosition = 1
     //var showPosition = 3
@@ -38,6 +47,8 @@ class ButtonSpace(val view: View) : View.OnClickListener {
 
 
     fun letsPlay(v: View) {
+
+        time("let play")
         showPosition = getAndStoreData.getShowPosition()
         if (showPosition == 1) {
             when (v.id) {
@@ -80,6 +91,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
 
     @SuppressLint("RestrictedApi")
     private fun setShowPositionMode() {
+        time("setShowPosition")
 
         showPosition = getAndStoreData.getShowPosition()
 
@@ -241,8 +253,16 @@ class ButtonSpace(val view: View) : View.OnClickListener {
             text = (if (text == "+") "-" else "-")
         }
     }
+    private fun time(st:String){
+        endTime=System.nanoTime()
+        val interval=TimeUnit.MILLISECONDS.convert(endTime-statrTime,TimeUnit.NANOSECONDS)
+        Log.d("clima",st+" --> $interval ms")
+
+    }
 
     override fun onClick(view: View) {
+        time("onClick")
+
         var counterStep = currentPage()
         if (showPosition == 3) {
             when (view.id) {
@@ -255,7 +275,9 @@ class ButtonSpace(val view: View) : View.OnClickListener {
         getAndStoreData.saveCurrentPage(counterStep)
 
         if (showPosition == 3) {
-           buttonActivation(0)
+            time("onClick1")
+            buttonActivation(0)
+
         }
 
         chageBackgroundColor(1, 1000)
@@ -267,6 +289,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
         Utile.listener1 = { it1, _ ->
             // Log.d("clima", "Hii num->$it1 and time->$it2 and size=$size")
             if (size == 1 || it1 == size) {
+                time("onClick2")
                 buttonActivation(1)
                 chageBackgroundColor(0, 1000)
             }
@@ -321,6 +344,8 @@ class ButtonSpace(val view: View) : View.OnClickListener {
 
     @SuppressLint("RestrictedApi")
     fun buttonActivation(ind: Int) {
+        time("buttonActivation $ind")
+
         showPosition = getAndStoreData.getShowPosition()
         with(view) {
             if (ind == 0) {

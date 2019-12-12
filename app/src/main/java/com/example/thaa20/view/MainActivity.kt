@@ -19,14 +19,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        justForCheking()
+
 
         setContentView(R.layout.activity_main)
     }
 
-    private fun justForCheking(){
-        Log.d("clima","cgk")
-    }
+
 
 
     fun storeTalkingListInFirestore() {
