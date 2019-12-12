@@ -2,6 +2,7 @@ package com.example.thaa20.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.thaa20.R
@@ -18,19 +19,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        justForCheking()
 
         setContentView(R.layout.activity_main)
     }
 
-
-
-
-
-
-
-
-
+    private fun justForCheking(){
+        Log.d("clima","cgk")
+    }
 
 
     fun storeTalkingListInFirestore() {
@@ -64,18 +60,6 @@ class MainActivity : AppCompatActivity() {
             }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /* fun stam(){

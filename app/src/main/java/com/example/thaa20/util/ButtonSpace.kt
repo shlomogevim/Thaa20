@@ -255,7 +255,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
         getAndStoreData.saveCurrentPage(counterStep)
 
         if (showPosition == 3) {
-            buttonActivation(0)
+           buttonActivation(0)
         }
 
         chageBackgroundColor(1, 1000)
@@ -305,7 +305,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
                 .animate(view.fab)
                 .alpha(1f, 0f)
                 .andAnimate(view.fab1)
-                .alpha(1f, 0f)
+                .alpha( 0f)
                 .duration(1500)
                 .start()
         } else {
@@ -313,7 +313,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
                 .animate(view.fab)
                 .alpha(0f, 1f)
                 .andAnimate(view.fab1)
-                .alpha(0f, 1f)
+                .alpha( 1f)
                 .duration(1500)
                 .start()
         }
