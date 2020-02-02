@@ -558,13 +558,10 @@ class ArrangeLayout(val view: View) {
         view.action_ListView.setSelection(15)
     }
 
-    fun setPosition() {
 
-        setLayoutShowMode()
-    }
 
     @SuppressLint("RestrictedApi")
-    private fun setLayoutShowMode() {
+     fun setLayoutShowMode() {
         showPosition = getAndStoreData.getShowPosition()
         with(view) {
             if (showPosition == 1) {
@@ -601,8 +598,8 @@ class ArrangeLayout(val view: View) {
                 ttPara_listView.visibility = INVISIBLE
                 action_ListView.visibility = INVISIBLE
                 tvAnimatinKind.visibility = INVISIBLE
-                fab.visibility = VISIBLE
-                fab1.visibility = VISIBLE
+                /*fab.visibility = VISIBLE
+                fab1.visibility = VISIBLE*/
             }
         }
     }
