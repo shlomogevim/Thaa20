@@ -1,21 +1,24 @@
 package com.example.thaa20.view
 
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import com.example.thaa20.R
 import com.example.thaa20.util.*
+import com.github.florent37.viewanimator.ViewAnimator
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.talking_details.*
+import kotlinx.android.synthetic.main.talking_details.view.*
 
 
 class DetailsTalking : Fragment() {
@@ -23,11 +26,11 @@ class DetailsTalking : Fragment() {
     var conv: Convers? = null
     lateinit var getStoreData: GetAndStoreData
     lateinit var animationInAction: AnimationInAction
-    lateinit var getAndStoreData:GetAndStoreData
+    lateinit var getAndStoreData: GetAndStoreData
     lateinit var arrangeLayout: ArrangeLayout
-    lateinit var buttonSpace:ButtonSpace
+    lateinit var buttonSpace: ButtonSpace
     lateinit var talkList: ArrayList<Talker>
-    var showPosition=1
+    var showPosition = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +38,8 @@ class DetailsTalking : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.talking_details, container, false)
     }
-    fun talkC()=talkList[getAndStoreData.getCurrentPage()]
+
+    fun talkC() = talkList[getAndStoreData.getCurrentPage()]
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,7 +60,7 @@ class DetailsTalking : Fragment() {
         getTalkList()
 
         arrangeLayout = ArrangeLayout(view)
-        buttonSpace=ButtonSpace(view)
+        buttonSpace = ButtonSpace(view)
 
         backGroundConfigration()
 
@@ -66,15 +70,33 @@ class DetailsTalking : Fragment() {
 
         buttonSpace.initButton()
 
-        showPosition=3
+        showPosition = 3
 
         getAndStoreData.saveShowPosition(showPosition)
 
-     //   getAndStoreData.saveCurrentPage(1)
+        //  getAndStoreData.saveCurrentPage(1)
 
-        arrangeLayout.setPosition()
+        arrangeLayout.setLayoutShowMode()
+        waitToAnnimateEnded()
 
         animationInAction.excuteTalker(talkC())
+
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun waitToAnnimateEnded() {
+        Utile.listener1 = { it1, _ ->
+
+            fab.visibility = VISIBLE
+            fab1.visibility = VISIBLE
+            ViewAnimator
+                .animate(view?.fab)
+                .alpha(0f, 1f)
+                .andAnimate(view?.fab1)
+                .alpha(0f, 1f)
+                .duration(3500)
+                .start()
+        }
 
     }
 
@@ -86,14 +108,14 @@ class DetailsTalking : Fragment() {
     }
 
     private fun getTalkList() {
-        talkList=getStoreData.createTalkListFromPref()
+        talkList = getStoreData.createTalkListFromPref()
 
-        if (talkList.size==0){
+        if (talkList.size == 0) {
             createTalkingListFromFirestore()  //open tool->firebase->firestore see if all depen. ok
-                                              //rebuilt project
-                                              // run and wait for result
+            //rebuilt project
+            // run and wait for result
         }
-        if (talkList.size==0){
+        if (talkList.size == 0) {
             // !! must be in remarked becaseus it inteferring to the firebase
             //  talkList=getStoreData.createTalkListFromTheStart()
 
@@ -101,110 +123,73 @@ class DetailsTalking : Fragment() {
         getAndStoreData.saveTalkingListInPref(talkList)
     }
 
-    fun createTalkingListFromFirestore():ArrayList<Talker>{
+    fun createTalkingListFromFirestore(): ArrayList<Talker> {
         var talkList1 = ArrayList<Talker>()
         var jsonS: String
         /*val st="courses"
         val st1="11"
         val st2="name"*/
-         val st="talker1"
-         val st1="3"
-         val st2="main"
-        var db=FirebaseFirestore.getInstance()
+        val st = "talker1"
+        val st1 = "3"
+        val st2 = "main"
+        var db = FirebaseFirestore.getInstance()
         db.collection(st).document(st1).get().addOnCompleteListener { task ->
-            if (task.result!!.exists()){
-                jsonS=task.result?.getString(st2)!!
+            if (task.result!!.exists()) {
+                jsonS = task.result?.getString(st2)!!
                 val gson = Gson()
                 val type = object : TypeToken<ArrayList<Talker>>() {}.type
                 talkList1 = gson.fromJson(jsonS, type)
                 getStoreData.saveTalkingListInPref(talkList1)
-                Log.d("clima"," $jsonS")
+                Log.d("clima", " $jsonS")
             }
         }
         return talkList1
     }
 
 
-    fun storeTalkingListFromFirestore(talkList:ArrayList<Talker>,index:Int){
+    fun storeTalkingListFromFirestore(talkList: ArrayList<Talker>, index: Int) {
 
         // must transfer value with  key-value format
-            val st = "talker1"
-            val st1 = index.toString()
-            val gson = Gson()
-            val jsonS = gson.toJson(talkList)
-            var db = FirebaseFirestore.getInstance()
-            var talker = HashMap<String, Any>()
-            talker.put("index", st1)
-            jsonS?.let { talker.put("main", it) }
-            db.collection(st).document(st1).set(talker)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(context, "Saving is succsses", Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Not Save because \${task.exception?.message",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+        val st = "talker1"
+        val st1 = index.toString()
+        val gson = Gson()
+        val jsonS = gson.toJson(talkList)
+        var db = FirebaseFirestore.getInstance()
+        var talker = HashMap<String, Any>()
+        talker.put("index", st1)
+        jsonS?.let { talker.put("main", it) }
+        db.collection(st).document(st1).set(talker)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(context, "Saving is succsses", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Not Save because \${task.exception?.message",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            }
 
 
     }
 
 
- /*   db.collection("talker1").document(versia.toString()).set(talker)
-    .addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            Toast.makeText(this, "Saving is succsses", Toast.LENGTH_LONG).show()
-        } else {
-            Toast.makeText(
-                this,
-                "Not Save because \${task.exception?.message",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
+    /*   db.collection("talker1").document(versia.toString()).set(talker)
+       .addOnCompleteListener { task ->
+           if (task.isSuccessful) {
+               Toast.makeText(this, "Saving is succsses", Toast.LENGTH_LONG).show()
+           } else {
+               Toast.makeText(
+                   this,
+                   "Not Save because \${task.exception?.message",
+                   Toast.LENGTH_LONG
+               ).show()
+           }
+       }
 
 
-} */
-
-
-
-
+   } */
 
 
     /* db.collection("courses").document("11").set(course).addOnCompleteListener { task ->
@@ -215,9 +200,6 @@ class DetailsTalking : Fragment() {
 
            }
         }*/
-
-
-
 
 
 }

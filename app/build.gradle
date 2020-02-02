@@ -7,13 +7,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 apply plugin: 'androidx.navigation.safeargs'
+
 apply plugin: 'com.google.gms.google-services'
 
 
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.example.thaa20"
+        applicationId "com.example.thaa21"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
